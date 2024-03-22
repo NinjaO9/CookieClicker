@@ -7,19 +7,37 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 
+# Game related objects
+cookieimg = pygame.image.load("Cookie.webp") #.convert_alpha()
+cookierect = cookieimg.get_rect(center=(640, 360))
+score = 0
+player_mouse = pygame.mouse
+
 # Import other scripts
 import cookiebehavior as cookie
+Cbehavior = cookie.Cbehavior # Let the class easily be called
+
 
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
-    screen.fill("purple")
+    screen.fill("#2d72cd")
 
     # Rotate cookie
-    asyncio.run(cookie.cookiebehavior.cookierotate(cookie, screen=screen))
+    asyncio.run(Cbehavior.cookierotate(cookie, screen=screen, cookieimg=cookieimg))
+
+    asyncio.run(Cbehavior.cookiedebug(cookie, screen=screen, cookieimg=cookieimg))
     
+     
+
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        if (cookierect.topleft[0] < player_mouse.get_pos()[0] < cookierect.topright[0]):
+            score += score
+            print(score)
+
+
+
 
     #if cookie_count >= price:
         #buy power_up
