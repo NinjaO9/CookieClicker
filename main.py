@@ -38,7 +38,7 @@ async def background() -> None:
 
 # Main Program-------------------------
 while running:
-    
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -55,12 +55,19 @@ while running:
         
     press_multiplier = PowerUp.applypowerup(press_multiplier)
 
-    #power_up could be +2 cookie per click 
-    #everytime you buy the upgrade it gets more expensive but makes it +3 +4 etc
-    #power_up it auto clicks for you so you get +1 a sec for doing nothing this also gets more expensive buy you get +2 +3 +4 etc
     #you have to get to a million to buy the last pawer up which just ends the game 
     
     pygame.display.flip()
     clock.tick(60)
+
+# TODO: Make an option to buy a power up, rather than forcing the user to get it automatically
+# TODO: Increase the price requirements for a power up, go over how it should be incremented (Probably by being squared)
+# TODO: Create a way for cookie counter to go up each second without affecting the speed of the other files
+# TODO: Figure out how to implement other power ups into the powerup.py file
+# TODO: Create the GUI for the player to interact with, allowing them to buy whatever powerups they want
+# TODO: Create an end goal / create a 'reward' or something when the player reaches 1 million cookies
+    
+# OPTIONAL------
+# TODO: Create mini cookies that give the player a static amount of cookies. This could maybe be a powerup
 
 pygame.quit() 
