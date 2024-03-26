@@ -18,14 +18,24 @@ player_mouse = pygame.mouse # Player's mouse
 pressed = False # Object to track if the mouse has been pressed and released
 press_multiplier = 1 # How many cookies per click
 
+power_ups = ["Grandma", "Baker", "Oven"]
+
 pygame.display.set_icon(cookieimg)
 pygame.display.set_caption("Clicking cookies...")
 
 
 # Import other scripts----------------
 import cookiebehavior
+import powerup
 
 CBehavior = cookiebehavior.Cbehavior(screen, cookieimg, angle, cookie_count) # Let the class easily be called
+PowerUp = powerup.PowerUps(cookie_count, autocookiemulti, press_multiplier, power_ups)
+
+def applypowerup(self, cookiecount, pressmulti):
+    if cookiecount >= 50:
+        return cookiecount - 50, pressmulti + 1
+    else:
+        return cookiecount, pressmulti
 
 # Main Program-------------------------
 
@@ -35,6 +45,8 @@ while running:
             running = False
     screen.fill("#2d72cd")
 
+    #PowerUp.cookiecount = cookie_count
+    
     text = font.render(f"Cookies: {cookie_count}", True, (0,0,0))
     screen.blit(text, (500, 50))
 
@@ -47,19 +59,8 @@ while running:
             if (cookierect.topleft[0] < player_mouse.get_pos()[0] < cookierect.topright[0]):
                 cookie_count += press_multiplier
                 pressed = False
-    
-    #if cookie_count >= price:
-            #buy power_up
-            #powerup_enabled = true
-                    
-
-    #if cookie_count >= price
-    #buy power_up
-    #cookie_count x press_multiplier +1
-
-    #if cookie_count >= price
-    #buy power_up
-    #cookie_count x autocookiemulti +1
+        
+    press_multiplier = applypowerup(cookie_count, press_multiplier)
 
     #power_up could be +2 cookie per click 
         #everytime you buy the upgrade it gets more expensive but makes it +3 +4 etc
@@ -68,5 +69,6 @@ while running:
 
     pygame.display.flip()
     clock.tick(60)
+
 
 pygame.quit() 
