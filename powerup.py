@@ -1,17 +1,35 @@
-
+import pygame
 class PowerUps():
 
     cookiecount = 0
     pressmulti = 1
+    autocookiemulti = 0
+    autogain = 0
 
-    def __init__(self, autocookiemulti, pressmulti, power_ups):
-        self.autocookiemulti = autocookiemulti
-        self.pressmulti = pressmulti 
-        self.power_ups  = power_ups
+    def __init__(self, price):
+        self.price = price
 
-    def applypowerup(self, pressmulti) -> int:
-        if self.cookiecount >= 50:
-            self.cookiecount -= 50
-            return pressmulti + 1
-        else:
-            return pressmulti
+    def increaseprice(self) -> None:
+        self.price *= 2
+
+    def applypresspowerup(self) -> int:
+        if self.cookiecount >= self.price:
+            self.cookiecount -= self.price
+            self.pressmulti += 1
+            self.increaseprice()
+
+    def applyautocookiemulti(self):
+        if self.cookiecount >= self.price:
+            self.cookiecount -= self.price
+            
+        pass
+ 
+class ShopStuff(PowerUps):
+    
+    def createshop(self):
+
+        pass
+
+    def buying_powerup(self):
+        pass
+

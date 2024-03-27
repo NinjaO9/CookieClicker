@@ -13,10 +13,9 @@ cookieimg = pygame.image.load("Cookie.webp").convert_alpha() # init cookie image
 cookierect = cookieimg.get_rect(center=(640, 360)) # Create cookieimg rectangle to make it easier to call
 autocookiemulti = 1 # Current multiplier for auto cookies
 angle = 0
+price = 50
 player_mouse = pygame.mouse # Player's mouse
 pressed = False # Object to track if the mouse has been pressed and released
-press_multiplier = 1 # How many cookies per click
-
 power_ups = ["Grandma", "Baker", "Oven"]
 
 pygame.display.set_icon(cookieimg)
@@ -28,13 +27,20 @@ import cookiebehavior
 import powerup
 
 CBehavior = cookiebehavior.Cbehavior(screen, cookieimg, angle) # Let the class easily be called
-PowerUp = powerup.PowerUps(autocookiemulti, press_multiplier, power_ups)
+Hands = powerup.PowerUps(autocookiemulti, price)
+
+for power in power_ups:
+    price *= 3
+    power = powerup.PowerUps(autocookiemulti, price)
 
 # Background functions-----------------
 async def background() -> None:
-    text = font.render(f"Cookies: {PowerUp.cookiecount}", True, (0,0,0))
+    text = font.render(f"Cookies: {Hands.cookiecount}", True, (0,0,0))
+    dtext = font.render(f"Price: {Hands.price}", True, (0,0,0))
     screen.blit(text, (500, 50))
+    screen.blit(dtext, (200, 50))
     await CBehavior.cookierotate()
+    
 
 # Main Program-------------------------
 while running:
@@ -50,18 +56,16 @@ while running:
         pressed = True
         if event.type == pygame.MOUSEBUTTONUP and pressed:
             if (cookierect.topleft[0] < player_mouse.get_pos()[0] < cookierect.topright[0]):
-                PowerUp.cookiecount += press_multiplier
+                Hands.cookiecount += Hands.pressmulti
                 pressed = False
-        
-    press_multiplier = PowerUp.applypowerup(press_multiplier)
 
-    #you have to get to a million to buy the last pawer up which just ends the game 
-    
+    if pygame.key.get_pressed()[pygame.K_p]:
+        Hands.applypresspowerup()
+        
     pygame.display.flip()
     clock.tick(60)
 
 # TODO: Make an option to buy a power up, rather than forcing the user to get it automatically
-# TODO: Increase the price requirements for a power up, go over how it should be incremented (Probably by being squared)
 # TODO: Create a way for cookie counter to go up each second without affecting the speed of the other files
 # TODO: Figure out how to implement other power ups into the powerup.py file
 # TODO: Create the GUI for the player to interact with, allowing them to buy whatever powerups they want
