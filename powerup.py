@@ -1,5 +1,5 @@
+import time
 class PowerUps():
-    import asyncio
 
     cookiecount = 0
     pressmulti = 1
@@ -14,19 +14,20 @@ class PowerUps():
         self.price *= 2
 
     @classmethod
+    def getautocookie(cls) -> None:
+        while True:
+            print("Running autocookie")
+            time.sleep(1)
+            cls.cookiecount += cls.automulti
+            print("Cookie count updated?")
+
+    @classmethod
     def applypresspowerup(cls) -> None:
         cls.pressmulti += 1
     
     @classmethod
     def applyautopower(cls, self) -> None:
         cls.automulti += self.autogain
-
-    @classmethod
-    async def getautocookie(cls) -> None:
-        print("Running autocookie")
-        await cls.asyncio.sleep(1)
-        cls.cookiecount += cls.automulti
-        print("Cookie count updated?")
     
     def checkpurchasereqs(self, ispress) -> None:
         if PowerUps.cookiecount >= self.price and ispress:
@@ -37,6 +38,16 @@ class PowerUps():
             PowerUps.cookiecount -= self.price
             PowerUps.applyautopower(self)
             self.increaseprice()
+
+class AutoCookie(PowerUps):
+    
+    @classmethod
+    async def getautocookie(cls) -> None:
+        while True:
+            print("Running autocookie")
+            time.sleep(1)
+            cls.cookiecount += cls.automulti
+            print("Cookie count updated?")
 
 
  

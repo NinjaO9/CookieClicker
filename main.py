@@ -1,5 +1,5 @@
 # Import libraries---------------
-import pygame, asyncio
+import pygame
 
 # pygame init--------------------
 pygame.init()
@@ -34,6 +34,7 @@ for power in power_names:
 
 if len(power_ups) == len(power_names):
     running = True
+    cycled = False
     print("The current powers are: ")
     for power in power_ups: #Debugging. Remove when done and ready to submit
         print(power.power) 
@@ -42,9 +43,11 @@ else:
 
 # Background functions-----------------
     
-async def background() -> None:
-    asyncio.create_task(CBehavior.cookierotate())
-    asyncio.create_task(powerup.PowerUps.getautocookie())
+def background() -> None:
+    global cycled
+    if not cycled:
+        #t2.start()
+        cycled = True
     text = font.render(f"Cookies: {powerup.PowerUps.cookiecount}", True, (0,0,0))
     dtext = font.render(f"Press Price: {Hands.price}", True, (0,0,0))
     gtext = font.render(f"Gma Price: {power_ups[0].price}", True, (0,0,0))
@@ -52,6 +55,8 @@ async def background() -> None:
     screen.blit(dtext, (200, 50)) 
     screen.blit(gtext, (200, 100)) 
 
+def autocookie() -> None:
+    powerup.PowerUps.cookiecount += powerup.PowerUps.automulti
 # Main Program-------------------------
 while running:
 
@@ -61,7 +66,10 @@ while running:
 
     screen.fill("#2d72cd")
 
-    asyncio.run(background())
+    CBehavior.cookierotate()
+    autocookie()
+    background()
+
 
     if event.type == pygame.MOUSEBUTTONDOWN or pressed:
         pressed = True
