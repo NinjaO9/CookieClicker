@@ -1,25 +1,32 @@
-import time
 class PowerUps():
 
     cookiecount = 0
     pressmulti = 1
-    automulti = 0
     autogain = 0
 
-    def __init__(self, price, power):
+    def __init__(self, price, name, automulti):
         self.price = price
-        self.power = power
+        self.name = name
+        self.automulti = automulti
 
-    def increaseprice(self) -> None:
-        self.price *= 2
+    def increaseprice(self, ispress) -> None:
+        if ispress:
+            self.price *= 2
+        else:
+            self.price = int(self.price * 2.5)
+            self.increaseautomulti()
+
+    def increaseautomulti(self) -> None:
+        self.automulti = int(self.automulti * 1.5)
+        if self.automulti == 0:
+            self.automulti += 2
 
     @classmethod
-    def getautocookie(cls) -> None:
-        while True:
-            print("Running autocookie")
-            time.sleep(1)
-            cls.cookiecount += cls.automulti
-            print("Cookie count updated?")
+    def getautocookie(cls) -> int:
+        print("Running autocookie")
+        cls.cookiecount += cls.autogain
+        print("Cookie count updated?")
+        return cls.cookiecount
 
     @classmethod
     def applypresspowerup(cls) -> None:
@@ -27,30 +34,18 @@ class PowerUps():
     
     @classmethod
     def applyautopower(cls, self) -> None:
-        cls.automulti += self.autogain
+        cls.autogain += self.automulti
+        print(f"New automulti is: {cls.autogain}")
     
     def checkpurchasereqs(self, ispress) -> None:
         if PowerUps.cookiecount >= self.price and ispress:
             PowerUps.cookiecount -= self.price
             PowerUps.applypresspowerup()
-            self.increaseprice()
+            self.increaseprice(True)
         elif PowerUps.cookiecount >= self.price and not ispress:
             PowerUps.cookiecount -= self.price
             PowerUps.applyautopower(self)
-            self.increaseprice()
-
-class AutoCookie(PowerUps):
-    
-    @classmethod
-    async def getautocookie(cls) -> None:
-        while True:
-            print("Running autocookie")
-            time.sleep(1)
-            cls.cookiecount += cls.automulti
-            print("Cookie count updated?")
-
-
- 
+            self.increaseprice(False) 
 class ShopStuff(PowerUps):
     
     def createshop(self):

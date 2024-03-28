@@ -10,44 +10,42 @@ clock = pygame.time.Clock()
 # Game related objects-------------
 cookieimg = pygame.image.load("Cookie.webp").convert_alpha()
 cookierect = cookieimg.get_rect(center=(640, 360)) 
+seconds = 0
 price = 50
-pressed = False 
 power_ups= []
 pygame.display.set_icon(cookieimg)
 pygame.display.set_caption("Clicking cookies...")
-
-power_names= ["Grandma", "Baker", "Oven"] # If more power ups are going to be added, edit this list. DO NOT CHANGE THE 'POWER_UPS' LIST
+please = True
+power_names= (("Grandma", 1), ("Baker", 3), ("Oven", 5)) # If more power ups are going to be added, edit this list. DO NOT CHANGE THE 'POWER_UPS' LIST
 
 # Import other scripts----------------
 import cookiebehavior
 import powerup
 
 CBehavior = cookiebehavior.Cbehavior(screen, cookieimg) 
-Hands = powerup.PowerUps(price, "Hands")
+Hands = powerup.PowerUps(price, "Hands", None)
 
-for power in power_names:
+
+for pname, automulti in power_names:
     price *= 3.5
     price = int(price)
-    power = powerup.PowerUps(price, power)
+    power = powerup.PowerUps(price, pname, automulti)
     print(power.__dict__) # Debugging purposes. Delete when everything is ready
     power_ups.append(power)
 
 if len(power_ups) == len(power_names):
+    pressed = False 
     running = True
-    cycled = False
     print("The current powers are: ")
     for power in power_ups: #Debugging. Remove when done and ready to submit
-        print(power.power) 
+        print(f"Power: {power.name} Starting Multiplier: {power.automulti}") 
 else:
     print("An Error Occured! (length of power_ups != length of power_names)")
 
 # Background functions-----------------
     
 def background() -> None:
-    global cycled
-    if not cycled:
-        #t2.start()
-        cycled = True
+    screen.fill("#2d72cd")
     text = font.render(f"Cookies: {powerup.PowerUps.cookiecount}", True, (0,0,0))
     dtext = font.render(f"Press Price: {Hands.price}", True, (0,0,0))
     gtext = font.render(f"Gma Price: {power_ups[0].price}", True, (0,0,0))
@@ -55,21 +53,15 @@ def background() -> None:
     screen.blit(dtext, (200, 50)) 
     screen.blit(gtext, (200, 100)) 
 
-def autocookie() -> None:
-    powerup.PowerUps.cookiecount += powerup.PowerUps.automulti
 # Main Program-------------------------
-while running:
 
+while running:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT: 
             running = False
 
-    screen.fill("#2d72cd")
-
-    CBehavior.cookierotate()
-    autocookie()
     background()
-
+    CBehavior.cookierotate()
 
     if event.type == pygame.MOUSEBUTTONDOWN or pressed:
         pressed = True
@@ -86,9 +78,13 @@ while running:
         power_ups[1].checkpurchasereqs(False)
     if pygame.key.get_pressed()[pygame.K_u]:
         power_ups[2].checkpurchasereqs(False)
-        
+                
     pygame.display.flip()
-    clock.tick(60)
+    time = clock.tick(60)/1000
+    seconds += time
+    if seconds >= 1:
+        powerup.PowerUps.getautocookie()
+        seconds = 0
 
 pygame.quit() 
 
