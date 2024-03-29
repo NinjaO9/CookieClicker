@@ -15,8 +15,7 @@ price = 50
 power_ups= []
 pygame.display.set_icon(cookieimg)
 pygame.display.set_caption("Clicking cookies...")
-please = True
-power_names= (("Grandma", 1), ("Baker", 3), ("Oven", 5)) # If more power ups are going to be added, edit this list. DO NOT CHANGE THE 'POWER_UPS' LIST
+power_names= (("Grandma", 1), ("Baker", 3), ("Oven", 5)) # If more power ups are going to be added, edit this list. Format it this way: (Name, auto increment)
 
 # Import other scripts----------------
 import cookiebehavior
@@ -24,7 +23,6 @@ import powerup
 
 CBehavior = cookiebehavior.Cbehavior(screen, cookieimg) 
 Hands = powerup.PowerUps(price, "Hands", None)
-
 
 for pname, automulti in power_names:
     price *= 3.5
@@ -45,13 +43,17 @@ else:
 # Background functions-----------------
     
 def background() -> None:
+    tempy = 50
     screen.fill("#2d72cd")
-    text = font.render(f"Cookies: {powerup.PowerUps.cookiecount}", True, (0,0,0))
-    dtext = font.render(f"Press Price: {Hands.price}", True, (0,0,0))
-    gtext = font.render(f"Gma Price: {power_ups[0].price}", True, (0,0,0))
-    screen.blit(text, (500, 50))
-    screen.blit(dtext, (200, 50)) 
-    screen.blit(gtext, (200, 100)) 
+    count = font.render(f"Cookies: {powerup.PowerUps.cookiecount}", True, (0,0,0))
+    pPrice = font.render(f"Press Price: {Hands.price}", True, (0,0,0))
+    screen.blit(count, (500,tempy))
+    screen.blit(pPrice, (200, tempy)) 
+    for power in power_ups:
+        tempy += 50
+        screen.blit(font.render(f"{power.name} Price: {power.price}", True, (0,0,0)), (200, tempy))
+    
+    
 
 # Main Program-------------------------
 
@@ -88,8 +90,6 @@ while running:
 
 pygame.quit() 
 
-# TODO: Create a way for cookie counter to go up each second without affecting the speed of the other files
-# TODO: Figure out how to implement other power ups into the powerup.py file
 # TODO: Create the GUI for the player to interact with, allowing them to buy whatever powerups they want
 # TODO: Create an end goal / create a 'reward' or something when the player reaches 1 million cookies
     

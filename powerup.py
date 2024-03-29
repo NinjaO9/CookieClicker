@@ -18,7 +18,7 @@ class PowerUps():
 
     def increaseautomulti(self) -> None:
         self.automulti = int(self.automulti * 1.5)
-        if self.automulti == 0:
+        if self.automulti == 0 or self.automulti == 1:
             self.automulti += 2
 
     @classmethod
