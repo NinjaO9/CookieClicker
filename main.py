@@ -1,33 +1,34 @@
 # Import libraries---------------
 import pygame
+from pygame import mouse, key, display
 
 # pygame init--------------------
 pygame.init()
 font = pygame.font.Font('freesansbold.ttf', 32)
-screen = pygame.display.set_mode((1280, 720))
+screen = display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 
 # Game related objects-------------
 cookieimg = pygame.image.load("Cookie.webp").convert_alpha()
 cookierect = cookieimg.get_rect(center=(640, 360)) 
-seconds = 0
+atime = 0
 price = 50
 power_ups= []
-pygame.display.set_icon(cookieimg)
-pygame.display.set_caption("Clicking cookies...")
+display.set_icon(cookieimg)
+display.set_caption("Clicking cookies...")
 power_names= (("Grandma", 1), ("Baker", 3), ("Oven", 5)) # If more power ups are going to be added, edit this list. Format it this way: (Name, auto increment)
 
 # Import other scripts----------------
-import cookiebehavior
-import powerup
+from cookiebehavior import Cbehavior
+from powerup import PowerUps
 
-CBehavior = cookiebehavior.Cbehavior(screen, cookieimg) 
-Hands = powerup.PowerUps(price, "Hands", None)
+CBehavior = Cbehavior(screen, cookieimg) 
+Hands = PowerUps(price, "Hands", None)
 
 for pname, automulti in power_names:
     price *= 3.5
     price = int(price)
-    power = powerup.PowerUps(price, pname, automulti)
+    power = PowerUps(price, pname, automulti)
     print(power.__dict__) # Debugging purposes. Delete when everything is ready
     power_ups.append(power)
 
@@ -45,7 +46,7 @@ else:
 def background() -> None:
     tempy = 50
     screen.fill("#2d72cd")
-    count = font.render(f"Cookies: {powerup.PowerUps.cookiecount}", True, (0,0,0))
+    count = font.render(f"Cookies: {PowerUps.cookiecount}", True, (0,0,0))
     pPrice = font.render(f"Press Price: {Hands.price}", True, (0,0,0))
     screen.blit(count, (500,tempy))
     screen.blit(pPrice, (200, tempy)) 
@@ -68,25 +69,25 @@ while running:
     if event.type == pygame.MOUSEBUTTONDOWN or pressed:
         pressed = True
         if event.type == pygame.MOUSEBUTTONUP and pressed:
-            if (cookierect.topleft[0] < pygame.mouse.get_pos()[0] < cookierect.bottomright[0]) and (cookierect.topleft[1] < pygame.mouse.get_pos()[1] < cookierect.bottomright[1]):
-                powerup.PowerUps.cookiecount += powerup.PowerUps.pressmulti
+            if (cookierect.topleft[0] < mouse.get_pos()[0] < cookierect.bottomright[0]) and (cookierect.topleft[1] < mouse.get_pos()[1] < cookierect.bottomright[1]):
+                PowerUps.cookiecount += PowerUps.pressmulti
                 pressed = False
 
-    if pygame.key.get_pressed()[pygame.K_p]:
+    if key.get_pressed()[pygame.K_p]:
         Hands.checkpurchasereqs(True)
-    if pygame.key.get_pressed()[pygame.K_o]:
+    if key.get_pressed()[pygame.K_o]:
         power_ups[0].checkpurchasereqs(False)
-    if pygame.key.get_pressed()[pygame.K_i]:
+    if key.get_pressed()[pygame.K_i]:
         power_ups[1].checkpurchasereqs(False)
-    if pygame.key.get_pressed()[pygame.K_u]:
+    if key.get_pressed()[pygame.K_u]:
         power_ups[2].checkpurchasereqs(False)
                 
-    pygame.display.flip()
-    time = clock.tick(60)/1000
-    seconds += time
-    if seconds >= 1:
-        powerup.PowerUps.getautocookie()
-        seconds = 0
+    display.flip()
+    dt = clock.tick(60)/1000
+    atime += dt
+    if atime >= 1:
+        PowerUps.getautocookie()
+        atime = 0
 
 pygame.quit() 
 
