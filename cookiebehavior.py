@@ -11,7 +11,7 @@ class Cbehavior():
     def cookierotate(self) -> None:
         self.angle += .1 #Degrees per frame
         cookie = (pygame.transform.rotate(self.cookieimg, self.angle))
-        cookierect = cookie.get_rect(center=(340, 360))
+        cookierect = cookie.get_rect(center=(640, 340))
         self.screen.blit(cookie, cookierect)
 
     

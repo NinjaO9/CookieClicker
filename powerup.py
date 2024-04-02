@@ -23,9 +23,7 @@ class PowerUps():
 
     @classmethod
     def getautocookie(cls) -> int:
-        print("Running autocookie")
         cls.cookiecount += cls.autogain
-        print("Cookie count updated?")
         return cls.cookiecount
 
     @classmethod
