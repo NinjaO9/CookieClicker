@@ -50,9 +50,8 @@ else:
 def background() -> None:
     tempy = 50
     screen.blit(ground, (0,0))
-    screen.blit
     count = font.render(f"Cookies: {PowerUps.cookiecount}", True, (255,255,255))
-    screen.blit(count, (640,tempy))
+    screen.blit(count, (600,tempy))
     for power in power_ups:
         tempy += 50
         screen.blit(font.render(f"{power.name} Price: {power.price}", True, (255,255,255)), (900, tempy))
@@ -62,12 +61,9 @@ def background() -> None:
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: 
-            running = False
-            
+            running = False    
     if PowerUps.cookiecount >= 100000:
         running = False
-        break
-
     background()
     CBehavior.cookierotate()
     if showing:
@@ -105,8 +101,13 @@ while running:
         display.set_caption(f"Clicking cookies... {PowerUps.cookiecount}")
         atime = 0
 
-while PowerUps.cookiecount == 100000:
+
+while PowerUps.cookiecount >= 100000:
     screen.blit(happy, (0,0))
+    screen.blit(font.render(f"You did hit 100,000 cookies!", True, (0,0,0)), (640, 340))
+    screen.blit(font.render(f"(Manditor crash)", True, (0,0,0)), (640, 440))
+    display.flip()
+
 pygame.quit() 
 
 # TODO: Create the GUI for the player to interact with, allowing them to buy whatever powerups they want
