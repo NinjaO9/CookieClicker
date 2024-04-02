@@ -10,7 +10,7 @@ clock = pygame.time.Clock()
 
 # Game related objects-------------
 cookieimg = pygame.image.load("Cookie.webp").convert_alpha()
-cookierect = cookieimg.get_rect(center=(640, 360)) 
+cookierect = cookieimg.get_rect(center=(340, 360)) 
 atime = 0
 price = 50
 power_ups= []
@@ -48,14 +48,12 @@ def background() -> None:
     screen.fill("#2d72cd")
     count = font.render(f"Cookies: {PowerUps.cookiecount}", True, (0,0,0))
     pPrice = font.render(f"Press Price: {Hands.price}", True, (0,0,0))
-    screen.blit(count, (500,tempy))
-    screen.blit(pPrice, (200, tempy)) 
+    screen.blit(count, (250,tempy))
+    screen.blit(pPrice, (900, tempy)) 
     for power in power_ups:
         tempy += 50
-        screen.blit(font.render(f"{power.name} Price: {power.price}", True, (0,0,0)), (200, tempy))
+        screen.blit(font.render(f"{power.name} Price: {power.price}", True, (0,0,0)), (900, tempy))
     
-    
-
 # Main Program-------------------------
 
 while running:
@@ -81,12 +79,15 @@ while running:
         power_ups[1].checkpurchasereqs(False)
     if key.get_pressed()[pygame.K_u]:
         power_ups[2].checkpurchasereqs(False)
+    if key.get_pressed()[pygame.K_RCTRL]:
+        PowerUps.cookiecount += 100
                 
     display.flip()
     dt = clock.tick(60)/1000
     atime += dt
     if atime >= 1:
         PowerUps.getautocookie()
+        display.set_caption(f"Clicking cookies... {PowerUps.cookiecount}")
         atime = 0
 
 pygame.quit() 
