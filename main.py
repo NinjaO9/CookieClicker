@@ -1,47 +1,19 @@
-# Import libraries---------------
-import pygame, time, asyncio
+# Import libraries and scripts---------------
+import pygame, time
 from pygame import mouse, key, display
-
-# pygame init--------------------
-pygame.init()
-font = pygame.font.Font('freesansbold.ttf', 32)
-screen = display.set_mode((1280, 720))
-clock = pygame.time.Clock()
-
-# Game related objects-------------
-back = pygame.image.load("Background.jfif")
-ground = pygame.transform.scale(back, (1280,720))
-cookieimg = pygame.image.load("Cookie.webp").convert_alpha()
-happ = pygame.image.load("Happi.jpeg")
-happy = pygame.transform.scale(happ, (1280, 720))
-cookierect = cookieimg.get_rect(center=(640, 340)) 
-showing = False
-atime = 0
-price = 50
-power_ups= []
-display.set_icon(cookieimg)
-display.set_caption("Clicking cookies...")
-power_names= (("Hands", None), ("Grandma", 1), ("Baker", 3), ("Oven", 5), ("Big MAMA", 1000)) # If more power ups are going to be added, edit this list. Format it this way: (Name, auto increment)
-
-# Import other scripts----------------
-from cookiebehavior import Cbehavior
 from powerup import PowerUps
+from objects import *
 
-CBehavior = Cbehavior(screen, cookieimg) 
-
+# Init powerup lists----------------
 for pname, automulti in power_names:
     power = PowerUps(price, pname, automulti)
-    price *= 2.5
+    price *= 3.2
     price = int(price)
     print(power.__dict__) # Debugging purposes. Delete when everything is ready
     power_ups.append(power)
 
 if len(power_ups) == len(power_names):
-    pressed = False 
     running = True
-    print("The current powers are: ")
-    for power in power_ups: #Debugging. Remove when done and ready to submit
-        print(f"Power: {power.name} Starting Multiplier: {power.automulti}") 
 else:
     print("An Error Occured! (length of power_ups != length of power_names)")
 
@@ -49,23 +21,35 @@ else:
     
 def background() -> None:
     tempy = 50
-    screen.blit(ground, (0,0))
     count = font.render(f"Cookies: {PowerUps.cookiecount}", True, (255,255,255))
+    screen.blit(backgrnd, (0,0))
     screen.blit(count, (600,tempy))
+    cookierotate()
     for power in power_ups:
         tempy += 50
         screen.blit(font.render(f"{power.name} Price: {power.price}", True, (255,255,255)), (900, tempy))
 
+def cookierotate() -> None:
+    global angle
+    angle += .1 #Degrees per frame
+    cookie = (pygame.transform.rotate(cookieimg, angle))
+    cookierect = cookie.get_rect(center=(640, 340))
+    screen.blit(cookie, cookierect)
+
 # Main Program-------------------------
+
+display.set_icon(cookieimg)
+display.set_caption("Clicking cookies...")
 
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: 
-            running = False    
+            running = False   
+     
     if PowerUps.cookiecount >= 100000:
         running = False
     background()
-    CBehavior.cookierotate()
+
     if showing:
         screen.blit(font.render(f"+{PowerUps.pressmulti}", True, (0,0,0)), (mouse.get_pos()))
 
@@ -105,7 +89,7 @@ while running:
 while PowerUps.cookiecount >= 100000:
     screen.blit(happy, (0,0))
     screen.blit(font.render(f"You did hit 100,000 cookies!", True, (0,0,0)), (640, 340))
-    screen.blit(font.render(f"(Manditor crash)", True, (0,0,0)), (640, 440))
+    screen.blit(font.render(f"(Manditory crash)", True, (0,0,0)), (640, 440))
     display.flip()
 
 pygame.quit() 
