@@ -29,8 +29,8 @@ power_names= (
     ("Grandma", 1, "o", pygame.K_o), 
     ("Baker", 3, "i", pygame.K_i), 
     ("Oven", 5, "u", pygame.K_u), 
-    ("Big MAMA", 100, "y", pygame.K_y)
-    ) # If more power ups are going to be added, edit this list. Format it this way: (Name, auto increment)
+    ("BIG OVEN", 100, "y", pygame.K_y)
+    ) # If more power ups are going to be added, edit this list. Format it this way: (Name, auto increment, letter, and the pygame letter command)
 
 
 # Window init
