@@ -44,11 +44,5 @@ class PowerUps():
             PowerUps.cookiecount -= self.price
             PowerUps.applyautopower(self)
             self.increaseprice(False) 
-class ShopStuff(PowerUps):
-    
-    def createshop(self):
-        pass
 
-    def buying_powerup(self):
-        pass
 
