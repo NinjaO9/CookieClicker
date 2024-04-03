@@ -4,10 +4,13 @@ class PowerUps():
     pressmulti = 1
     autogain = 0
 
-    def __init__(self, price, name, automulti):
+    def __init__(self, price, name, automulti, letter, pykey):
         self.price = price
         self.name = name
         self.automulti = automulti
+        self.letter = letter
+        self.pykey = pykey
+    
 
     def increaseprice(self, ispress) -> None:
         if ispress:
