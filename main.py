@@ -48,6 +48,7 @@ while running:
      
     if PowerUps.cookiecount >= 100000:
         running = False
+        
     background()
 
     if showing:
