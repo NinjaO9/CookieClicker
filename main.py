@@ -23,9 +23,9 @@ def background() -> None:
     count = font.render(f"Cookies: {PowerUps.cookiecount}", True, WHITE)
     CPS = font.render(f"CPS: {PowerUps.autogain}", True, WHITE)
     screen.blit(backgrnd, (0,0))
+    cookierotate()
     screen.blit(count, (550,tempy))
     screen.blit(CPS, (550, 100))
-    cookierotate()
     for power in power_ups:
         tempy += 50
         screen.blit(font.render(f"({power.letter}) {power.name} Price: {power.price}", True, WHITE), (870, tempy))
