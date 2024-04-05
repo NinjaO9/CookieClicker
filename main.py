@@ -49,6 +49,8 @@ while running:
     if PowerUps.cookiecount >= 100000:
         screen.blit(font.render(f"You hit 100,000 cookies!", True, WHITE, BLACK), (40, 100))
         cookieimg = happy
+    else:
+        cookieimg = cookie
 
     if event.type == pygame.MOUSEBUTTONDOWN or pressed:
         pressed = True

@@ -9,8 +9,10 @@ clock = pygame.time.Clock()
 
 # images init
 backgrnd = pygame.transform.scale(pygame.image.load("Background.jfif"), (1280,720))
-cookieimg = pygame.image.load("Cookie.webp").convert_alpha()
+cookie = pygame.image.load("Cookie.webp").convert_alpha()
 happy = pygame.transform.scale(pygame.image.load("Happy.png"), (360, 360)).convert_alpha()
+
+cookieimg = cookie
 
 # variables init
 cookierect = cookieimg.get_rect(center=(640, 340)) 
